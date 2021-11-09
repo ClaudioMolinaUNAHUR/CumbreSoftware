@@ -1,0 +1,57 @@
+import conocimientos.*
+import participantes.*
+import paisesEmpresasActividades.*
+import cumbre.*
+
+/*Juana es programadora argentina con 600 commits, conoce sobre programación básica, CSS y HTML.
+Lucía es programadora brasileña con 800 commits, conoce sobre programación básica y bases de datos.
+Mariana es especialista argentina con 200 commits, conoce sobre programación básica, instalación Linux, objetos y diseño con objetos.
+Susana es especialista colombiana con 1500 commits, conoce sobre programación básica y objetos.*/
+describe "testX" {
+	var argentina = new Pais()
+	var brasil = new Pais()
+	var colombia = new Pais()
+	var coreaDelNorte = new Pais()
+	var coreaDelSur = new Pais()
+	var juana = new Programador(pais=argentina,commits = 600,conocimientos = [programacionBasica,css,html])
+	var lucia = new Programador(pais=brasil,commits = 800,conocimientos = [programacionBasica,basesDeDatos])
+	var mariana = new Especialista(pais=argentina,commits = 200,conocimientos = [programacionBasica,instalacionLinux,objetos,disenioConObjetos])
+	var susana = new Especialista(pais=colombia,commits = 1500,conocimientos = [programacionBasica,objetos])
+	method initialize(){
+		coreaDelNorte.registrarConflicto(coreaDelSur)
+		coreaDelSur.registrarConflicto(coreaDelNorte)
+		cumbre.ingresa(juana)
+		cumbre.ingresa(lucia)
+		cumbre.ingresa(mariana)
+		cumbre.agregarAuspiciante(coreaDelNorte)
+		cumbre.agregarAuspiciante(argentina)
+		cumbre.agregarAuspiciante(colombia)
+	}
+	test"2 paises participantes"{
+		assert.equals(cumbre.paisesParticipantes(), #{argentina,brasil})
+	}
+	test"paisConMasParticipantes arg"{
+		assert.equals(cumbre.paisConMasParticipantes(), argentina)
+	}
+	test"es relevante son todos cape"{
+		assert.that(cumbre.esRelevante())
+	}
+	test"3 paises participantes"{
+		cumbre.ingresa(susana)
+		assert.equals(cumbre.paisesParticipantes(), #{argentina,brasil,colombia})
+	}
+	test"paisConMasParticipantes2 arg"{
+		cumbre.ingresa(susana)
+		assert.equals(cumbre.paisConMasParticipantes(), argentina)
+	}
+	test"no es relevante "{
+		cumbre.ingresa(susana)
+		assert.notThat(cumbre.esRelevante())
+	}
+	test "es conflictivo"{
+		assert.that(cumbre.esConflictivoCon(coreaDelSur))
+	}
+	test "lucia(brasil) es extranjera a la cumbre"{
+		assert.equals(cumbre.participantesExtranjeros(), [lucia])
+	}
+}
